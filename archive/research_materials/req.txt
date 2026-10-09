@@ -1,0 +1,8 @@
+GET http://10.128.240.232/university_volgmu/hs/volgmed_data/educational/organization/structure HTTP/1.1
+content-type: application/json
+Authorization: Basic SiteAPI:27Fr
+
+1) выше запрос на получение структуры
+2) https://aw-demo.ru/public/dashboard/OeJ3xbFpG3jLF4nyNy3RfvU0HugozV0N
+3) http://85.239.60.139:8088/superset/dashboard/1/?native_filters_key=uK7UKhUlRn0
+4) референсный дашборд Бендя http://10.128.222.26:5173/infrastructure
