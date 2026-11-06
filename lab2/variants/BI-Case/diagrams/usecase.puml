@@ -1,0 +1,119 @@
+@startuml usecase
+!pragma layout elk
+left to right direction
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam nodesep 35
+skinparam ranksep 70
+skinparam packageStyle rectangle
+skinparam packageBackgroundColor White
+skinparam usecaseBackgroundColor White
+
+actor "Сотрудник\nхозяйственной службы" as Operations
+actor "Специалист\nэксплуатации и БТИ" as BTI
+actor "Аналитик" as Analyst
+actor "Представитель\nруководства" as Leadership
+actor "Представитель\nподразделения" as Department
+actor "Комендант\nобщежития" as Dormitory
+
+
+rectangle "BI Case — анализ инфраструктуры университета" {
+  package "EP-1. Сведения об объекте" as Group1 {
+    usecase "UC-1\nПросмотреть сведения\nоб объекте или помещении" as UC1
+    usecase "UC-1.1\nРаскрыть дерево\nдо помещения" as UC11
+    usecase "UC-1.2\nОткрыть карточку\nобъекта" as UC12
+    usecase "UC-1.3\nПросмотреть полный\nпуть объекта" as UC13
+    usecase "UC-1.4\nПросмотреть характеристики\nи принадлежность" as UC14
+    usecase "UC-1.5\nПерейти на страницу\nподразделения" as UC15
+    UC1 .> UC11 : <<include>>
+    UC1 .> UC12 : <<include>>
+    UC12 .> UC13 : <<include>>
+    UC12 .> UC14 : <<include>>
+    UC15 .> UC12 : <<extend>>
+  }
+  package "EP-2. Сводка" as Group2 {
+    usecase "UC-9\nПолучить сводку\nпо выбранной области" as UC9
+    usecase "UC-9.1\nВыбрать область\nи фильтры" as UC91
+    usecase "UC-9.2\nПросмотреть таблицы\nи графики" as UC92
+    usecase "UC-9.3\nПросмотреть количество\nобъектов и помещений" as UC93
+    usecase "UC-9.4\nПросмотреть места\nи посадочные места" as UC94
+    usecase "UC-9.5\nПросмотреть оснащенность\nпомещений" as UC95
+    usecase "UC-9.6\nПросмотреть оценку\nсостояния" as UC96
+    UC9 .> UC91 : <<include>>
+    UC9 .> UC92 : <<include>>
+    UC93 .> UC92 : <<extend>>
+    UC94 .> UC92 : <<extend>>
+    UC95 .> UC92 : <<extend>>
+    UC96 .> UC92 : <<extend>>
+  }
+  package "EP-3. Площади" as Group3 {
+    usecase "UC-4\nСопоставить площадь БТИ\nи площади помещений" as UC4
+    usecase "UC-4.1\nПросмотреть сумму\nплощадей помещений" as UC41
+    usecase "UC-4.2\nПросмотреть подтвержденную\nплощадь БТИ" as UC42
+    usecase "UC-4.3\nПросмотреть\nразницу площадей" as UC43
+    usecase "UC-4.4\nОткрыть список\nпомещений расчета" as UC44
+    UC4 .> UC41 : <<include>>
+    UC4 .> UC42 : <<include>>
+    UC43 .> UC4 : <<extend>>
+    UC44 .> UC4 : <<extend>>
+  }
+  package "EP-4. Проверка показателя" as Group4 {
+    usecase "UC-10\nПроверить смысл\nи происхождение показателя" as UC10
+    usecase "UC-10.1\nПросмотреть определение\nи единицу измерения" as UC101
+    usecase "UC-10.2\nПроверить статус\nи полноту данных" as UC102
+    usecase "UC-10.3\nПросмотреть источник\nи дату данных" as UC103
+    UC10 .> UC101 : <<include>>
+    UC10 .> UC102 : <<include>>
+    UC10 .> UC103 : <<include>>
+  }
+  package "EP-5. Экспорт" as Group5 {
+    usecase "UC-5 / EP-5\nВыгрузить полную\nтаблицу в Excel" as UC5
+  }
+
+  ' Скрытые связи задают только размещение рамок эпиков.
+  Group1 -[hidden]down-> Group2
+  Group2 -[hidden]down-> Group3
+  Group3 -[hidden]down-> Group4
+  Group4 -[hidden]down-> Group5
+}
+
+actor "Источник инфраструктуры\n(внешняя система)" as DataSource
+
+UC41 .> UC92 : <<extend>>
+
+Operations -- UC1
+Operations -- UC9
+Operations -- UC4
+UC41 .> UC92 : <<extend>>
+
+Operations -- UC10
+Operations -- UC5
+BTI -- UC1
+BTI -- UC9
+BTI -- UC4
+BTI -- UC10
+BTI -- UC5
+Analyst -- UC1
+Analyst -- UC9
+Analyst -- UC4
+Analyst -- UC10
+Analyst -- UC5
+UC9 -- Leadership
+UC10 -- Leadership
+UC5 -- Leadership
+UC1 -- Department
+UC9 -- Department
+UC10 -- Department
+UC5 -- Department
+UC1 -- Dormitory
+UC9 -- Dormitory
+UC10 -- Dormitory
+UC5 -- Dormitory
+
+UC1 -- DataSource
+UC9 -- DataSource
+UC4 -- DataSource
+UC10 -- DataSource
+UC5 -- DataSource
+@enduml
