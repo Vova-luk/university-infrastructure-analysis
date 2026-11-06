@@ -1,0 +1,92 @@
+@startuml logical-data
+left to right direction
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+skinparam classBackgroundColor White
+skinparam nodesep 55
+skinparam ranksep 85
+hide circle
+hide methods
+
+entity "Срез данных" as Snapshot <<сохраняется>> {
+  * версия данных
+  --
+  источник
+  дата источника, если известна
+  время успешной загрузки
+}
+
+entity "Сведения об объекте" as ObjectInfo <<внешние данные>> {
+  * версия среза
+  * учётное обозначение [Q-6]
+  --
+  основное название; название БТИ
+  тип и назначение
+  известная площадь
+  площадь БТИ
+  происхождение и состав площади БТИ
+  жилые места; посадочные места
+  мобильные компьютерные станции
+  признаки оснащённости; оценка состояния
+  подтверждённая принадлежность
+  ссылка подразделения; комендант
+  источник и дата сведений
+}
+
+entity "Вхождение в дерево" as TreeEntry <<внешние данные>> {
+  * версия среза
+  * подтверждённый путь [Q-6]
+}
+
+entity "Определение показателя" as Definition <<методика>> {
+  * наименование показателя
+  * редакция методики
+  --
+  определение
+  единица измерения
+  правило расчёта
+  уровни и условия применимости
+}
+
+entity "Контекст анализа" as Context <<формируется>> {
+  * выбранный путь
+  * набор фильтров
+  * разрешённая область
+  * порядок строк
+  * версия данных
+  * редакция методики
+  --
+  табличная выборка, если есть
+}
+
+entity "Значение показателя" as MetricValue <<формируется>> {
+  * контекст анализа
+  * определение показателя
+  * область значения
+  --
+  значение, если доступно
+  статус
+  охват заполненных полей
+  причина ограничения
+  источник и дата сведений
+}
+
+entity "Файл Excel" as ExcelFile <<формируется>> {
+  * ссылка получения файла
+  --
+  лист данных
+  лист параметров
+}
+
+Snapshot ||--o{ ObjectInfo
+Snapshot ||--o{ TreeEntry
+ObjectInfo ||--|{ TreeEntry
+TreeEntry |o--o{ TreeEntry
+TreeEntry ||--o{ Context
+Context ||--o{ MetricValue
+Definition ||--o{ MetricValue
+TreeEntry ||--o{ MetricValue
+Context ||--o{ ExcelFile
+@enduml
