@@ -1,16 +1,16 @@
 @startuml logical-data
-left to right direction
+top to bottom direction
 skinparam linetype ortho
 skinparam shadowing false
 skinparam defaultFontName Arial
 skinparam classAttributeIconSize 0
 skinparam classBackgroundColor White
-skinparam nodesep 55
-skinparam ranksep 85
+skinparam nodesep 65
+skinparam ranksep 60
 hide circle
 hide methods
 
-entity "Срез данных" as Snapshot <<сохраняется>> {
+entity "Сохранённая версия данных" as Snapshot {
   * версия данных
   --
   источник
@@ -19,7 +19,7 @@ entity "Срез данных" as Snapshot <<сохраняется>> {
 }
 
 entity "Сведения об объекте" as ObjectInfo <<внешние данные>> {
-  * версия среза
+  * версия данных
   * учётное обозначение [Q-6]
   --
   основное название; название БТИ
@@ -36,7 +36,7 @@ entity "Сведения об объекте" as ObjectInfo <<внешние д�
 }
 
 entity "Вхождение в дерево" as TreeEntry <<внешние данные>> {
-  * версия среза
+  * версия данных
   * подтверждённый путь [Q-6]
 }
 
@@ -80,13 +80,13 @@ entity "Файл Excel" as ExcelFile <<формируется>> {
   лист параметров
 }
 
-Snapshot ||--o{ ObjectInfo
-Snapshot ||--o{ TreeEntry
-ObjectInfo ||--|{ TreeEntry
+Snapshot ||-right-o{ ObjectInfo
+Snapshot ||-down-o{ TreeEntry
+ObjectInfo ||-down-|{ TreeEntry
 TreeEntry |o--o{ TreeEntry
-TreeEntry ||--o{ Context
-Context ||--o{ MetricValue
-Definition ||--o{ MetricValue
-TreeEntry ||--o{ MetricValue
-Context ||--o{ ExcelFile
+TreeEntry ||-right-o{ Context
+Context ||-down-o{ MetricValue
+Definition ||-right-o{ MetricValue
+TreeEntry ||-down-o{ MetricValue
+Context ||-down-o{ ExcelFile
 @enduml
